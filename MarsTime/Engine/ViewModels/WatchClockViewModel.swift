@@ -4,7 +4,6 @@
 
 import Foundation
 import Observation
-import WatchKit
 
 @Observable
 final class WatchClockViewModel {
@@ -24,47 +23,15 @@ final class WatchClockViewModel {
     private let engine = MarsTimeEngine()
     private var timer: Timer?
     private var isActive: Bool = false
-    private var wristState: WKInterfaceDeviceWristState = .wristUp
 
     // MARK: - Initialization
 
     init() {
-        setupWristStateObservation()
+        // Initialization
     }
 
     deinit {
         stopUpdates()
-    }
-
-    // MARK: - Wrist State Management
-
-    private func setupWristStateObservation() {
-        // Observe wrist state for battery optimization
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(wristStateChanged),
-            name: NSNotification.Name("WKInterfaceDeviceWristStateDidChangeNotification"),
-            object: nil
-        )
-    }
-
-    @objc private func wristStateChanged(_ notification: Notification) {
-        let device = WKInterfaceDevice.current()
-        wristState = device.wristState
-
-        switch wristState {
-        case .wristUp:
-            // Wrist raised - immediate update and start timer
-            updateMarsTime()
-            if isActive {
-                startTimer()
-            }
-        case .wristDown:
-            // Wrist down - stop timer to save battery
-            stopTimer()
-        @unknown default:
-            break
-        }
     }
 
     // MARK: - Public Methods
@@ -76,10 +43,8 @@ final class WatchClockViewModel {
         // Immediate update
         updateMarsTime()
 
-        // Start timer only if wrist is up
-        if wristState == .wristUp {
-            startTimer()
-        }
+        // Start timer
+        startTimer()
     }
 
     func stopUpdates() {

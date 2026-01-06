@@ -4,7 +4,6 @@
 
 import SwiftUI
 
-@main
 struct MarsTimeWatchApp: App {
     @State private var viewModel = WatchClockViewModel()
 

@@ -11,7 +11,11 @@
 		CB82FAE42F0D3F8200D65A4A /* MarsTimeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAE32F0D3F8200D65A4A /* MarsTimeEngine.swift */; };
 		CB82FAE52F0D3F8200D65A4A /* MarsTimeEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAE32F0D3F8200D65A4A /* MarsTimeEngine.swift */; };
 		CB82FAE82F0D3FCB00D65A4A /* MarsClockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAE72F0D3FC000D65A4A /* MarsClockViewModel.swift */; };
-		CB82FAEA2F0D406B00D65A4A /* WatchClockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAE92F0D406200D65A4A /* WatchClockViewModel.swift */; };
+		CB82FAF42F0D45CA00D65A4A /* MissionControlBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAEE2F0D45CA00D65A4A /* MissionControlBackground.swift */; };
+		CB82FAF52F0D45CA00D65A4A /* TimeDisplayGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAF22F0D45CA00D65A4A /* TimeDisplayGrid.swift */; };
+		CB82FAF62F0D45CA00D65A4A /* MainClockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAF12F0D45CA00D65A4A /* MainClockView.swift */; };
+		CB82FAF72F0D45CA00D65A4A /* LongitudeInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAF02F0D45CA00D65A4A /* LongitudeInputView.swift */; };
+		CB82FAFD2F0D49CB00D65A4A /* WatchClockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB82FAE92F0D406200D65A4A /* WatchClockViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +80,10 @@
 		CB82FAE32F0D3F8200D65A4A /* MarsTimeEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarsTimeEngine.swift; sourceTree = "<group>"; };
 		CB82FAE72F0D3FC000D65A4A /* MarsClockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarsClockViewModel.swift; sourceTree = "<group>"; };
 		CB82FAE92F0D406200D65A4A /* WatchClockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchClockViewModel.swift; sourceTree = "<group>"; };
+		CB82FAEE2F0D45CA00D65A4A /* MissionControlBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionControlBackground.swift; sourceTree = "<group>"; };
+		CB82FAF02F0D45CA00D65A4A /* LongitudeInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongitudeInputView.swift; sourceTree = "<group>"; };
+		CB82FAF12F0D45CA00D65A4A /* MainClockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainClockView.swift; sourceTree = "<group>"; };
+		CB82FAF22F0D45CA00D65A4A /* TimeDisplayGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeDisplayGrid.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -160,6 +168,7 @@
 		CB82FA802F0D3DF500D65A4A = {
 			isa = PBXGroup;
 			children = (
+				CB82FAF32F0D45CA00D65A4A /* iOS-Views */,
 				CB82FAE22F0D3F4800D65A4A /* Engine */,
 				CB82FA992F0D3DF800D65A4A /* MarsTimeTests */,
 				CB82FAA32F0D3DF800D65A4A /* MarsTimeUITests */,
@@ -224,6 +233,25 @@
 				CB82FAB82F0D3F0D00D65A4A /* MarsTimeWatch Watch App */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		CB82FAEF2F0D45CA00D65A4A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CB82FAEE2F0D45CA00D65A4A /* MissionControlBackground.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		CB82FAF32F0D45CA00D65A4A /* iOS-Views */ = {
+			isa = PBXGroup;
+			children = (
+				CB82FAEF2F0D45CA00D65A4A /* Components */,
+				CB82FAF02F0D45CA00D65A4A /* LongitudeInputView.swift */,
+				CB82FAF12F0D45CA00D65A4A /* MainClockView.swift */,
+				CB82FAF22F0D45CA00D65A4A /* TimeDisplayGrid.swift */,
+			);
+			path = "iOS-Views";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -476,8 +504,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB82FAE52F0D3F8200D65A4A /* MarsTimeEngine.swift in Sources */,
-				CB82FAEA2F0D406B00D65A4A /* WatchClockViewModel.swift in Sources */,
 				CB82FAE82F0D3FCB00D65A4A /* MarsClockViewModel.swift in Sources */,
+				CB82FAF42F0D45CA00D65A4A /* MissionControlBackground.swift in Sources */,
+				CB82FAF52F0D45CA00D65A4A /* TimeDisplayGrid.swift in Sources */,
+				CB82FAF62F0D45CA00D65A4A /* MainClockView.swift in Sources */,
+				CB82FAF72F0D45CA00D65A4A /* LongitudeInputView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +531,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB82FAE42F0D3F8200D65A4A /* MarsTimeEngine.swift in Sources */,
+				CB82FAFD2F0D49CB00D65A4A /* WatchClockViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
