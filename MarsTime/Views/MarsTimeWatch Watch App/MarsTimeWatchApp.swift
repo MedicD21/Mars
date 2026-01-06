@@ -1,17 +1,17 @@
-//
-//  MarsTimeWatchApp.swift
-//  MarsTimeWatch Watch App
-//
-//  Created by Dustin Schaaf on 1/6/26.
-//
+// MarsTimeWatchApp.swift
+// Mars Clock System - watchOS App Entry Point
+// NASA/JPL Flight Software Standard
 
 import SwiftUI
 
 @main
-struct MarsTimeWatch_Watch_AppApp: App {
+struct MarsTimeWatchApp: App {
+    @State private var viewModel = WatchClockViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WatchClockView()
+                .environment(viewModel)
         }
     }
 }

@@ -1,17 +1,18 @@
-//
-//  MarsTimeApp.swift
-//  MarsTime
-//
-//  Created by Dustin Schaaf on 1/6/26.
-//
+// MarsTimeApp.swift
+// Mars Clock System - iOS App Entry Point
+// NASA/JPL Flight Software Standard
 
 import SwiftUI
 
 @main
 struct MarsTimeApp: App {
+    @State private var viewModel = MarsClockViewModel()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainClockView()
+                .environment(viewModel)
+                .preferredColorScheme(.dark)
         }
     }
 }
