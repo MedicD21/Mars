@@ -163,7 +163,7 @@
 				CB82FAE22F0D3F4800D65A4A /* Engine */,
 				CB82FA992F0D3DF800D65A4A /* MarsTimeTests */,
 				CB82FAA32F0D3DF800D65A4A /* MarsTimeUITests */,
-				CB82FAB82F0D3F0D00D65A4A /* MarsTimeWatch Watch App */,
+				CB82FAED2F0D412700D65A4A /* Views */,
 				CB82FAC62F0D3F1100D65A4A /* MarsTimeWatch Watch AppTests */,
 				CB82FAD02F0D3F1100D65A4A /* MarsTimeWatch Watch AppUITests */,
 				CB82FA8A2F0D3DF500D65A4A /* Products */,
@@ -216,6 +216,14 @@
 			children = (
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		CB82FAED2F0D412700D65A4A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CB82FAB82F0D3F0D00D65A4A /* MarsTimeWatch Watch App */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
