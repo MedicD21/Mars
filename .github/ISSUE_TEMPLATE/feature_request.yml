@@ -1,0 +1,187 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for suggesting a feature!**
+
+        Please note: This is a mission-grade scientific tool.
+        Features should align with professional astronaut/scientist use cases.
+        We do NOT accept: gamification, novelty features, or unscientific additions.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: What type of feature is this?
+      options:
+        - Algorithm enhancement (calculation improvement)
+        - New time system (e.g., Solar Longitude)
+        - UI improvement (better display/UX)
+        - Platform support (new platform)
+        - Documentation (guides/examples)
+        - Performance optimization
+        - Accessibility improvement
+        - Testing/Validation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platforms
+    attributes:
+      label: Target Platform(s)
+      description: Which platforms would this affect?
+      multiple: true
+      options:
+        - iOS
+        - watchOS
+        - Android
+        - All platforms
+        - Core engine
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: "As a planetary scientist, I need to track Mars solar longitude (Ls) to understand seasonal variations..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should this feature work?
+      placeholder: |
+        Add solar longitude (Ls) calculation to MarsTimeData:
+        - Implement Allison & McEwen (2000) Equation 19
+        - Display Ls alongside MTC/LMST
+        - Add seasonal indicator (Spring/Summer/Autumn/Winter)
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches did you consider?
+      placeholder: "Could use simplified approximation, but full equation is preferred for accuracy"
+
+  - type: textarea
+    id: nasa-reference
+    attributes:
+      label: NASA/JPL Reference
+      description: For scientific features, provide NASA/JPL source
+      placeholder: |
+        Citation: Allison & McEwen (2000), Equation 19, Page 227
+        DOI: 10.1016/S0032-0633(00)00002-6
+        NASA Mars24 includes Ls calculation
+      render: text
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature?
+      options:
+        - Critical (Blocks mission operations)
+        - High (Significant improvement)
+        - Medium (Nice to have)
+        - Low (Enhancement)
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: Use Cases
+      description: Who would use this and how?
+      placeholder: |
+        - Planetary scientists tracking Martian seasons
+        - Mission planners scheduling activities by season
+        - Meteorologists analyzing climate data
+
+  - type: textarea
+    id: mockups
+    attributes:
+      label: Mockups/Examples
+      description: Screenshots, sketches, or code examples
+      placeholder: |
+        ```swift
+        struct MarsTimeData {
+            // Existing fields...
+            let solarLongitude: Double  // Ls in degrees [0, 360)
+            let season: MarsSeason      // Spring, Summer, Autumn, Winter
+        }
+        ```
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Testing Strategy
+      description: How should this feature be tested?
+      placeholder: |
+        - Unit tests against NASA Mars24 Ls output
+        - Validate across full Mars year (668 sols)
+        - Edge cases: perihelion, aphelion
+
+  - type: dropdown
+    id: breaking
+    attributes:
+      label: Breaking Change?
+      description: Would this break existing code?
+      options:
+        - "No (backward compatible)"
+        - "Yes (requires API changes)"
+        - "Maybe (needs discussion)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Implementation Notes
+      description: Technical considerations for implementation
+      placeholder: |
+        - Requires trigonometric calculations
+        - Add ~50 lines to MarsTimeEngine
+        - Cross-platform consistency required
+        - Performance impact: negligible
+
+  - type: checkboxes
+    id: alignment
+    attributes:
+      label: Mission Alignment
+      description: Confirm this aligns with project goals
+      options:
+        - label: This is scientifically accurate (not an approximation)
+          required: true
+        - label: This has practical use for astronauts/scientists
+          required: true
+        - label: This maintains mission-grade software standards
+          required: true
+        - label: This is NOT gamification or novelty
+          required: true
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I can implement this feature myself
+        - label: I can provide NASA/JPL references
+        - label: I can write tests for this feature
+        - label: I can update documentation
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Anything else we should know?

@@ -1,0 +1,136 @@
+name: 🐛 Bug Report
+description: Report a bug or calculation error in the Mars Clock System
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for reporting a bug!**
+
+        Please fill out this template to help us fix the issue quickly.
+        For calculation errors, please include NASA Mars24 reference values.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: Which platform is affected?
+      options:
+        - Swift (iOS/watchOS)
+        - Kotlin (Android)
+        - Both platforms
+        - Core engine (platform-agnostic)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How severe is this bug?
+      options:
+        - Critical (Calculation error, crashes)
+        - High (Major functionality broken)
+        - Medium (Feature not working as expected)
+        - Low (Minor issue, cosmetic)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clear description of the bug
+      placeholder: "When I calculate Mars time for [date], the MTC is incorrect..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed steps to reproduce the bug
+      placeholder: |
+        1. Set longitude to 137.4°E
+        2. Use UTC timestamp 2025-01-15 12:00:00
+        3. Calculate Mars time
+        4. Observe incorrect MTC value
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+      placeholder: "MTC should be 08:53:00 (verified with NASA Mars24)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happens?
+      placeholder: "MTC shows 08:52:45 (15 seconds off)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: nasa-reference
+    attributes:
+      label: NASA Mars24 Reference
+      description: If this is a calculation error, provide NASA Mars24 output
+      placeholder: |
+        Verified with NASA Mars24 tool:
+        - Input: 2025-01-15 12:00:00 UTC
+        - Expected MSD: 54XXX.XX
+        - Expected MTC: XX:XX:XX
+        - Tool URL: https://www.giss.nasa.gov/tools/mars24/
+      render: text
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: App or engine version
+      placeholder: "v1.0.0"
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Your development environment
+      placeholder: |
+        - iOS: 17.2
+        - Xcode: 15.2
+        - Swift: 5.9
+        - Device: iPhone 15 Simulator
+      render: text
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Relevant error messages or stack traces
+      render: text
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other relevant information
+      placeholder: "This only happens near sol boundaries..."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I have searched existing issues to avoid duplicates
+          required: true
+        - label: I have verified this with NASA Mars24 (for calculation errors)
+          required: false
+        - label: I can provide code to reproduce this issue
+          required: false

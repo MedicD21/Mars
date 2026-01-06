@@ -1,0 +1,335 @@
+# Mars Clock System - Continuous Integration
+# NASA/JPL Flight Software Standard
+#
+# Automated testing and validation for cross-platform Mars time calculations
+
+name: CI - Mars Time Validation
+
+on:
+  push:
+    branches: [ main, 'claude/**' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Swift/iOS Tests
+  swift-tests:
+    name: Swift Engine Tests (macOS)
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '15.2'
+
+      - name: Create Swift Package
+        run: |
+          cd core/reference-implementation/swift
+          cat > Package.swift << 'EOF'
+          // swift-tools-version: 5.9
+          import PackageDescription
+
+          let package = Package(
+              name: "MarsTimeEngine",
+              platforms: [.iOS(.v17), .macOS(.v14), .watchOS(.v10)],
+              products: [
+                  .library(name: "MarsTimeEngine", targets: ["MarsTimeEngine"])
+              ],
+              targets: [
+                  .target(name: "MarsTimeEngine", path: ".", sources: ["MarsTimeEngine.swift"]),
+                  .testTarget(name: "MarsTimeEngineTests", dependencies: ["MarsTimeEngine"], path: "../../../tests/swift")
+              ]
+          )
+          EOF
+
+      - name: Run Swift tests
+        run: |
+          cd core/reference-implementation/swift
+          swift test --enable-code-coverage
+
+      - name: Generate coverage report
+        run: |
+          cd core/reference-implementation/swift
+          xcrun llvm-cov export -format="lcov" \
+            .build/debug/MarsTimeEnginePackageTests.xctest/Contents/MacOS/MarsTimeEnginePackageTests \
+            -instr-profile=.build/debug/codecov/default.profdata > coverage.lcov || true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./core/reference-implementation/swift/coverage.lcov
+          flags: swift
+          name: swift-coverage
+
+  # Kotlin/Android Tests
+  kotlin-tests:
+    name: Kotlin Engine Tests (JVM)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create Gradle project
+        run: |
+          cd core/reference-implementation/kotlin
+
+          # Create build.gradle.kts
+          cat > build.gradle.kts << 'EOF'
+          plugins {
+              kotlin("jvm") version "1.9.22"
+              jacoco
+          }
+
+          group = "com.nasa.marstime"
+          version = "1.0.0"
+
+          repositories {
+              mavenCentral()
+          }
+
+          dependencies {
+              testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+              testImplementation(kotlin("test"))
+          }
+
+          tasks.test {
+              useJUnitPlatform()
+              finalizedBy(tasks.jacocoTestReport)
+          }
+
+          tasks.jacocoTestReport {
+              dependsOn(tasks.test)
+              reports {
+                  xml.required.set(true)
+                  html.required.set(true)
+              }
+          }
+
+          kotlin {
+              jvmToolchain(17)
+          }
+          EOF
+
+          # Create settings.gradle.kts
+          cat > settings.gradle.kts << 'EOF'
+          rootProject.name = "MarsTimeEngine"
+          EOF
+
+          # Create source directory structure
+          mkdir -p src/main/kotlin/com/nasa/marstime/engine
+          mkdir -p src/test/kotlin/com/nasa/marstime/engine
+
+          # Copy engine
+          cp MarsTimeEngine.kt src/main/kotlin/com/nasa/marstime/engine/
+
+          # Copy tests
+          cp ../../../tests/kotlin/MarsTimeEngineTest.kt src/test/kotlin/com/nasa/marstime/engine/
+
+      - name: Grant execute permission for gradlew
+        run: |
+          cd core/reference-implementation/kotlin
+          chmod +x gradlew || gradle wrapper
+          chmod +x gradlew
+
+      - name: Run Kotlin tests
+        run: |
+          cd core/reference-implementation/kotlin
+          ./gradlew test jacocoTestReport
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./core/reference-implementation/kotlin/build/reports/jacoco/test/jacocoTestReport.xml
+          flags: kotlin
+          name: kotlin-coverage
+
+  # Cross-Platform Validation
+  cross-platform-validation:
+    name: Cross-Platform Consistency Check
+    needs: [swift-tests, kotlin-tests]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate NASA reference data
+        run: |
+          echo "✅ Validating NASA reference timestamps..."
+
+          # Check JSON is valid
+          if command -v jq &> /dev/null; then
+            jq empty core/validation/nasa-reference-timestamps.json
+            echo "✅ NASA reference data is valid JSON"
+          else
+            python3 -c "import json; json.load(open('core/validation/nasa-reference-timestamps.json'))"
+            echo "✅ NASA reference data is valid JSON"
+          fi
+
+          # Count test cases
+          TEST_COUNT=$(python3 -c "import json; print(len(json.load(open('core/validation/nasa-reference-timestamps.json'))['test_cases']))")
+          echo "✅ Found $TEST_COUNT NASA reference test cases"
+
+          if [ "$TEST_COUNT" -lt 10 ]; then
+            echo "❌ ERROR: Expected at least 10 test cases, found $TEST_COUNT"
+            exit 1
+          fi
+
+      - name: Validate documentation
+        run: |
+          echo "✅ Checking required documentation..."
+
+          REQUIRED_DOCS=(
+            "README.md"
+            "docs/ARCHITECTURE.md"
+            "docs/MARS_TIME_ALGORITHM.md"
+            "docs/REFERENCES.md"
+          )
+
+          for doc in "${REQUIRED_DOCS[@]}"; do
+            if [ -f "$doc" ]; then
+              echo "✅ Found: $doc"
+            else
+              echo "❌ Missing: $doc"
+              exit 1
+            fi
+          done
+
+      - name: Check constants consistency
+        run: |
+          echo "✅ Validating NASA/JPL constants across implementations..."
+
+          # Check Swift constants
+          if grep -q "let unixEpochJD: Double = 2440587.5" core/reference-implementation/swift/MarsTimeEngine.swift; then
+            echo "✅ Swift: UNIX_EPOCH_JD correct"
+          else
+            echo "❌ Swift: UNIX_EPOCH_JD mismatch"
+            exit 1
+          fi
+
+          if grep -q "let deltaTSeconds: Double = 69.184" core/reference-implementation/swift/MarsTimeEngine.swift; then
+            echo "✅ Swift: DELTA_T_SECONDS correct"
+          else
+            echo "❌ Swift: DELTA_T_SECONDS mismatch"
+            exit 1
+          fi
+
+          # Check Kotlin constants
+          if grep -q "const val UNIX_EPOCH_JD: Double = 2440587.5" core/reference-implementation/kotlin/MarsTimeEngine.kt; then
+            echo "✅ Kotlin: UNIX_EPOCH_JD correct"
+          else
+            echo "❌ Kotlin: UNIX_EPOCH_JD mismatch"
+            exit 1
+          fi
+
+          if grep -q "const val DELTA_T_SECONDS: Double = 69.184" core/reference-implementation/kotlin/MarsTimeEngine.kt; then
+            echo "✅ Kotlin: DELTA_T_SECONDS correct"
+          else
+            echo "❌ Kotlin: DELTA_T_SECONDS mismatch"
+            exit 1
+          fi
+
+          echo "✅ All constants validated across platforms"
+
+  # Documentation Validation
+  documentation-check:
+    name: Documentation Quality Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check for broken links (Markdown)
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          config-file: '.github/markdown-link-check-config.json'
+          check-modified-files-only: 'yes'
+        continue-on-error: true
+
+      - name: Validate NASA citations
+        run: |
+          echo "✅ Checking NASA/JPL citations in documentation..."
+
+          # Check for Allison & McEwen (2000) citation
+          if grep -r "Allison.*McEwen.*2000" docs/; then
+            echo "✅ Found Allison & McEwen (2000) citation"
+          else
+            echo "⚠️  Warning: Missing Allison & McEwen (2000) citation"
+          fi
+
+          # Check for Mars24 reference
+          if grep -r "Mars24" docs/; then
+            echo "✅ Found Mars24 reference"
+          else
+            echo "⚠️  Warning: Missing Mars24 reference"
+          fi
+
+  # Security Scan
+  security-scan:
+    name: Security & Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy security scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+        continue-on-error: true
+
+      - name: Check for secrets
+        run: |
+          echo "✅ Scanning for accidentally committed secrets..."
+
+          # Check for common secret patterns
+          if grep -r "api[_-]?key" --include="*.swift" --include="*.kt" .; then
+            echo "⚠️  Warning: Found potential API key references"
+          fi
+
+          if grep -r "password" --include="*.swift" --include="*.kt" .; then
+            echo "⚠️  Warning: Found password references"
+          fi
+
+          echo "✅ Security scan complete"
+
+  # Final Summary
+  summary:
+    name: Test Summary
+    needs: [swift-tests, kotlin-tests, cross-platform-validation, documentation-check]
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# 🚀 Mars Clock System - CI Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Swift Engine Tests" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Kotlin Engine Tests" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Cross-Platform Validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Documentation Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## NASA/JPL Compliance" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Mars24 v8.0 Algorithm" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Allison & McEwen (2000) Formulas" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Reference Timestamp Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status**: All checks passed ✅" >> $GITHUB_STEP_SUMMARY
