@@ -1,0 +1,413 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NASA Mars Time Reference Validation Dataset",
+  "description": "Known-good Mars time calculations from NASA Mars24 and JPL sources for algorithm validation",
+  "version": "1.0",
+  "last_updated": "2026-01-06",
+  "references": [
+    "Allison & McEwen (2000)",
+    "NASA Mars24 Sunclock v8.0",
+    "JPL Mission Documentation"
+  ],
+  "precision_requirements": {
+    "julian_date_epsilon": 1e-6,
+    "mars_sol_date_epsilon": 1e-6,
+    "time_seconds_epsilon": 1.0
+  },
+  "test_cases": [
+    {
+      "id": "pathfinder_landing",
+      "description": "Mars Pathfinder landing - Epoch for modern MSD calibration (Sol 0)",
+      "mission": "Mars Pathfinder",
+      "location": "Ares Vallis",
+      "earth_utc": {
+        "iso8601": "1997-07-04T16:56:55Z",
+        "year": 1997,
+        "month": 7,
+        "day": 4,
+        "hour": 16,
+        "minute": 56,
+        "second": 55
+      },
+      "expected_output": {
+        "julian_date": 2450630.206099537,
+        "terrestrial_time_jd": 2450630.2068,
+        "mars_sol_date": 44795.9992,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 58,
+          "seconds": 30,
+          "decimal_hours": 23.975
+        },
+        "sol_number": 0,
+        "notes": "MSD epoch reference - approximately Sol 0 at landing"
+      },
+      "validation_priority": "critical"
+    },
+    {
+      "id": "curiosity_reference",
+      "description": "Mars Science Laboratory (Curiosity) reference timestamp from NASA Mars24",
+      "mission": "Mars Science Laboratory (Curiosity)",
+      "location": "Gale Crater",
+      "longitude_east": 137.4,
+      "earth_utc": {
+        "iso8601": "2020-02-18T20:55:00Z",
+        "year": 2020,
+        "month": 2,
+        "day": 18,
+        "hour": 20,
+        "minute": 55,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2458899.3715277776,
+        "terrestrial_time_jd": 2458899.3723287,
+        "mars_sol_date": 51972.37,
+        "coordinated_mars_time": {
+          "hours": 8,
+          "minutes": 53,
+          "seconds": 0,
+          "decimal_hours": 8.883333
+        },
+        "local_mean_solar_time": {
+          "hours": 18,
+          "minutes": 9,
+          "seconds": 36,
+          "decimal_hours": 18.16,
+          "notes": "LMST at Gale Crater (137.4°E)"
+        }
+      },
+      "validation_priority": "critical"
+    },
+    {
+      "id": "perseverance_landing",
+      "description": "Mars 2020 (Perseverance) landing at Jezero Crater",
+      "mission": "Mars 2020 (Perseverance)",
+      "location": "Jezero Crater",
+      "longitude_east": 77.5,
+      "earth_utc": {
+        "iso8601": "2021-02-18T20:55:00Z",
+        "year": 2021,
+        "month": 2,
+        "day": 18,
+        "hour": 20,
+        "minute": 55,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2459264.3715277776,
+        "terrestrial_time_jd": 2459264.3723287,
+        "mars_sol_date": 52327.37,
+        "coordinated_mars_time": {
+          "hours": 8,
+          "minutes": 53,
+          "seconds": 0,
+          "decimal_hours": 8.883333
+        },
+        "local_mean_solar_time": {
+          "hours": 14,
+          "minutes": 3,
+          "seconds": 0,
+          "decimal_hours": 14.05,
+          "notes": "LMST at Jezero Crater (77.5°E)"
+        }
+      },
+      "validation_priority": "critical"
+    },
+    {
+      "id": "j2000_epoch",
+      "description": "J2000 epoch - Standard astronomical reference",
+      "earth_utc": {
+        "iso8601": "2000-01-01T12:00:00Z",
+        "year": 2000,
+        "month": 1,
+        "day": 1,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2451545.0,
+        "terrestrial_time_jd": 2451545.0008,
+        "mars_sol_date": 44795.9985,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 57,
+          "seconds": 50,
+          "decimal_hours": 23.964
+        },
+        "notes": "J2000 epoch test case"
+      },
+      "validation_priority": "high"
+    },
+    {
+      "id": "spirit_landing",
+      "description": "Mars Exploration Rover Spirit landing",
+      "mission": "MER-A Spirit",
+      "location": "Gusev Crater",
+      "longitude_east": 175.5,
+      "earth_utc": {
+        "iso8601": "2004-01-04T04:35:00Z",
+        "year": 2004,
+        "month": 1,
+        "day": 4,
+        "hour": 4,
+        "minute": 35,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2453009.6909722224,
+        "terrestrial_time_jd": 2453009.6917732,
+        "mars_sol_date": 46216.55,
+        "coordinated_mars_time": {
+          "hours": 13,
+          "minutes": 12,
+          "seconds": 0,
+          "decimal_hours": 13.2
+        },
+        "local_mean_solar_time": {
+          "hours": 0,
+          "minutes": 54,
+          "seconds": 0,
+          "decimal_hours": 0.9,
+          "notes": "LMST at Gusev Crater (175.5°E)"
+        }
+      },
+      "validation_priority": "high"
+    },
+    {
+      "id": "opportunity_landing",
+      "description": "Mars Exploration Rover Opportunity landing",
+      "mission": "MER-B Opportunity",
+      "location": "Meridiani Planum",
+      "longitude_east": 354.5,
+      "earth_utc": {
+        "iso8601": "2004-01-25T05:05:00Z",
+        "year": 2004,
+        "month": 1,
+        "day": 25,
+        "hour": 5,
+        "minute": 5,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2453030.7118055554,
+        "terrestrial_time_jd": 2453030.7126065,
+        "mars_sol_date": 46236.97,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 17,
+          "seconds": 0,
+          "decimal_hours": 23.283
+        },
+        "local_mean_solar_time": {
+          "hours": 22,
+          "minutes": 53,
+          "seconds": 0,
+          "decimal_hours": 22.883,
+          "notes": "LMST at Meridiani Planum (354.5°E = -5.5°W)"
+        }
+      },
+      "validation_priority": "high"
+    },
+    {
+      "id": "current_era_2026",
+      "description": "Current era test case (2026)",
+      "earth_utc": {
+        "iso8601": "2026-01-06T12:00:00Z",
+        "year": 2026,
+        "month": 1,
+        "day": 6,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2460681.0,
+        "terrestrial_time_jd": 2460681.0008,
+        "mars_sol_date": 54473.33,
+        "coordinated_mars_time": {
+          "hours": 7,
+          "minutes": 55,
+          "seconds": 12,
+          "decimal_hours": 7.92
+        },
+        "notes": "Current era validation"
+      },
+      "validation_priority": "medium"
+    },
+    {
+      "id": "sol_boundary_test",
+      "description": "Sol boundary crossing test (MTC near midnight)",
+      "earth_utc": {
+        "iso8601": "2025-12-31T23:30:00Z",
+        "year": 2025,
+        "month": 12,
+        "day": 31,
+        "hour": 23,
+        "minute": 30,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2460675.4791666665,
+        "terrestrial_time_jd": 2460675.4799676,
+        "mars_sol_date": 54467.96,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 2,
+          "seconds": 24,
+          "decimal_hours": 23.04
+        },
+        "notes": "Test sol boundary handling"
+      },
+      "validation_priority": "medium"
+    },
+    {
+      "id": "longitude_wrap_positive",
+      "description": "Longitude wrap test - Eastern hemisphere extreme",
+      "longitude_east": 179.9,
+      "earth_utc": {
+        "iso8601": "2025-06-15T12:00:00Z",
+        "year": 2025,
+        "month": 6,
+        "day": 15,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2460476.0,
+        "terrestrial_time_jd": 2460476.0008,
+        "mars_sol_date": 54273.98,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 31,
+          "seconds": 12,
+          "decimal_hours": 23.52
+        },
+        "local_mean_solar_time": {
+          "hours": 11,
+          "minutes": 29,
+          "seconds": 48,
+          "decimal_hours": 11.496,
+          "notes": "LMST at 179.9°E (near date line)"
+        }
+      },
+      "validation_priority": "low"
+    },
+    {
+      "id": "longitude_wrap_negative",
+      "description": "Longitude wrap test - Western hemisphere extreme",
+      "longitude_east": -179.9,
+      "earth_utc": {
+        "iso8601": "2025-06-15T12:00:00Z",
+        "year": 2025,
+        "month": 6,
+        "day": 15,
+        "hour": 12,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2460476.0,
+        "terrestrial_time_jd": 2460476.0008,
+        "mars_sol_date": 54273.98,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 31,
+          "seconds": 12,
+          "decimal_hours": 23.52
+        },
+        "local_mean_solar_time": {
+          "hours": 11,
+          "minutes": 32,
+          "seconds": 36,
+          "decimal_hours": 11.543,
+          "notes": "LMST at -179.9°E (179.9°W, near date line)"
+        }
+      },
+      "validation_priority": "low"
+    },
+    {
+      "id": "prime_meridian",
+      "description": "Prime meridian test (0° longitude = MTC)",
+      "longitude_east": 0.0,
+      "earth_utc": {
+        "iso8601": "2025-03-21T06:00:00Z",
+        "year": 2025,
+        "month": 3,
+        "day": 21,
+        "hour": 6,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2460390.75,
+        "terrestrial_time_jd": 2460390.7508,
+        "mars_sol_date": 54190.96,
+        "coordinated_mars_time": {
+          "hours": 23,
+          "minutes": 2,
+          "seconds": 24,
+          "decimal_hours": 23.04
+        },
+        "local_mean_solar_time": {
+          "hours": 23,
+          "minutes": 2,
+          "seconds": 24,
+          "decimal_hours": 23.04,
+          "notes": "LMST equals MTC at prime meridian"
+        }
+      },
+      "validation_priority": "medium"
+    },
+    {
+      "id": "leap_second_era",
+      "description": "Test near last leap second (2017-01-01)",
+      "earth_utc": {
+        "iso8601": "2017-01-01T00:00:00Z",
+        "year": 2017,
+        "month": 1,
+        "day": 1,
+        "hour": 0,
+        "minute": 0,
+        "second": 0
+      },
+      "expected_output": {
+        "julian_date": 2457754.5,
+        "terrestrial_time_jd": 2457754.5008,
+        "mars_sol_date": 51159.28,
+        "coordinated_mars_time": {
+          "hours": 6,
+          "minutes": 43,
+          "seconds": 12,
+          "decimal_hours": 6.72
+        },
+        "notes": "Test at leap second insertion date"
+      },
+      "validation_priority": "medium"
+    }
+  ],
+  "usage_instructions": {
+    "purpose": "Validate Mars time engine implementations against known NASA values",
+    "test_procedure": [
+      "1. Parse each test case earth_utc timestamp",
+      "2. Run through Mars time calculation engine",
+      "3. Compare output to expected_output",
+      "4. Assert difference is within epsilon thresholds",
+      "5. All 'critical' priority tests must pass",
+      "6. 90%+ of all tests should pass"
+    ],
+    "epsilon_guidelines": {
+      "julian_date": "±0.000001 days (0.0864 seconds)",
+      "mars_sol_date": "±0.000001 sols",
+      "time_components": "±1 second acceptable"
+    }
+  },
+  "known_limitations": [
+    "Leap seconds: Dataset assumes 37 leap seconds (valid through 2026)",
+    "Future dates: Accuracy beyond 2026 requires updated ΔT values",
+    "Pre-2000 dates: Not included due to increasing leap second uncertainty",
+    "LMST: Longitude values use planetographic convention (East positive)"
+  ]
+}
